@@ -1,0 +1,38 @@
+Function are delcared with the 'fun' keyword. Functions names should start with a lowerCamelCase. 
+Paramters must delccare their names and types. 
+
+```
+fun myFunction(name: String, age: Int): String {
+  return "My name is $name, I'm $age years old."
+}
+```
+
+Functions can also be written as one liners
+```
+fun square(number: Int) = number * number
+```
+
+Call a function with its name and a arguments for the parameters. 
+```
+val greeting = happyBirthday("Sid", 24)
+
+```
+
+Return, if you don't care about the return value you don't need to asign it. If you want to return null you must do so with return 
+null. If a function never needs to return anything the function should have the return type 'Unit'. 
+
+Unit is both a singleton and type of that object, and it represents "this function never returns any information"
+
+
+Overloading functions must be distingiushable from each other through their parameter list. This is known as a function signature, 
+```
+fun square(number: Int) = number * number
+fun square(number: Double) number * number
+```
+
+A function can take arbitrary number of arguments, arguments can be be defined with optional parameters with default values, not all
+values need to be assigned a default value. A parameter with a defualt value must specifiy the type explicitly.
+
+```
+fun user(name: String = "John", id: Int, age: Int: -1)
+```
