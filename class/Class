@@ -1,1 +1,54 @@
+Classes in Kotlin are declared using the keyword 'class'
+```
+class MyClass {
+  //.....
+}
+```
+The class declaration consists of the class name, the class header(primary constructor), and the class body, surrounded by curly braces. Both header and the body are optional;
+if the class has no body, the curly braces can be omitted. 
 
+```
+class Empty
+```
+
+Constructors
+ A class in kotlin can have a primary constructor and one or more secondary constructors. The primary constructor is part of the class header: it goes after the classname
+ and optional type parameters
+ ```
+ class Person constructor(firstName: String) {
+ 
+ }
+ ```
+ 
+ If the primary constructor does have any annotations or visiblity modifiers, the 'constructor' keyword can be omitted. The primiary constructor can not contain any code, 
+ initialization code can be entered in the 'init' block. During an instance initialization the initializer blcks are executed in the same order as they appear in the class body,
+ interleaveed with the property initializers.
+ 
+ ```
+ class MyClass(name: String) {
+  val firstProperty = "First property: $name".also(::println)
+  init {
+    println("First initializer block that prints ${name}")
+  }
+  val secondProperty = "Second property: ${name.length}")
+  init {
+    println("Second initializer: ${name.length}")
+  }
+}
+```
+The parameters of the primary constructor can be used in the 'init' block. In fact for declaring properties and intializing them from the primary constructor, kotlin has concise
+syntax:
+```
+class Person(val firstName: String, val lastName: String, var age: Int) {
+}
+```
+
+If the construtor has annotations or visibility modifiers, the constructor keyword is required, and the modifiers go before it. 
+```
+class Customer public @Inject constructor(name: String) {
+
+}
+```
+```
+
+ 
