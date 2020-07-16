@@ -49,6 +49,118 @@ class Customer public @Inject constructor(name: String) {
 
 }
 ```
+
+
+Secondary Constructors
+The class can also declare secondary constructgors, which are prefixed with constructor
+```
+class Person {
+  var children: Mutablist<Person> = mutableListOf<>()
+  constructore(paretn: Person) {
+    parent.children.add(this)
+  }
+}
 ```
 
- 
+If the class has a primary constructor, each scondary constructor needs to delegate to the primary constructor, eitehr 
+directly or indirectly through another seocndray construcor. Delegation to another constructor of the same class is odne using
+the 'this' keyword
+```
+class Person(val name: String) {
+  var childre: MutableList<Person> = mutableListof<>()
+  constructor(name: String, parent: Person) : this(name) {
+    parent.children.add(this)
+  }
+}
+```
+
+Note code in the initializer blocks effectively becomes part of the primary constructor. Delegation to the primary constructor happens 
+as the first staement of a scondary constructor, so the code in all initializer blocks and proeprty initializers is executed before the
+secondary constructor body.  Even if the calls has no primary constructor, the delegatioin stil happens implicityly, and the intializer 
+blocks are still executed:
+```
+class Constructors {
+  int {
+    println("Init block")
+  }
+  
+  constructor(i: Int) {
+    println("Constructor")
+  }
+}
+```
+
+If a non-abstract class does not declare any constructors, it will have a generated primary constructor with no arguments. The visibility of the constructor will be public.
+If you do not want your class to have a public oconstructor, you need to dceclare an empty primary constructor with non-deafult visibility. 
+```
+class DontCreateMe private constructor() { /******/}
+```
+
+Create Instances of classes
+To create an instance of a class, we call the constructor as if it were a regular function:
+```
+val invoice = Invoice()
+val customer = Customer("Joe Smith")
+```
+
+
+Class members
+Class members can contain the following
+- Constructors and initializer blocks
+- Functions
+- Properties
+- Nested and inner classe
+- Object Declarations
+
+Inheritance
+All classes in kotlin have a common superclass Any, that is the default supercalsss for a class with no sypertypes declared. 
+```
+call Example // Implicityly inherits from Any
+```
+
+Any has three methods equals(), hashCode() and to String(). Thus they are dfined for all kotlin classes.
+
+By default kotlin classess are final: they can't be inherited. To make a class inheritable, mark it with the open keyword. 
+```
+open class Base // Class is open for inheritance
+```
+To delcare an explicit supertype, place the type after a colon in the class header:
+```
+open class Base(p: Int)
+class Derived(p: Int) : Base(p)
+```
+
+If the derived class has a primary constructor, the base class can be initialized right there, using teh parameters of the primary constructor. 
+
+If the derived class has no primary constructor, then each secondary constructor has to initialize the base type using the super kyword, or to 
+delegate to another constructor which does that. Note that in this case different secondary constructors can call different secondary constructors
+can call different constructors of the base type:
+```
+Class MyView :View {
+  constructor(ctx: Context) : super(ctx)
+  constructor ctx: Context, attrs: AttributeSet) : super(ctx, attrs)
+}
+```
+
+
+Overriding methdos 
+Kotlin requires explicit modifiers for overridable members and for overrides:
+```
+open class Shape {
+  open fun draw()( {/****/}
+  fun fill() {/*******/}
+}
+
+class Circle() : Shape() {
+  override fun draw() {/*****/}
+}
+```
+
+The override modifier is required for Circle.draw(). If it were missing, teh compiler would complain. If there is no open modifier on a function, like shape.fill(), 
+declaring a method with the same signature in a subclass is illegal, either with override or without it. The open modifier has no effect when added on memebers of a final class
+
+A member marked override is itself open, i.e. it may be overridden in subclasses. If you want to prohit re-overriding , use final
+```
+open class Rectangle() : Shape()
+  final override fun draw() {/*****/}
+```
