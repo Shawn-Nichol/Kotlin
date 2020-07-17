@@ -194,3 +194,120 @@ class Polygon : Shape {
 ```
 
 
+Derived class initialization order
+During construction of a new instance of a derived class, teh base class initialization is done as the first step (preceded only by evaluation of the argumetns for the base class constructor)
+and thus happens before the initialization logic of the derived class is run
+```
+open class Base(val name: String) {
+  inti {
+    println("Initializing base")
+  }
+  
+  open val size: int = name.length.also {
+    println("Initializing size in Base: $it")
+}
+
+class Derived (
+  name: String,
+  val lastName: String 
+) : Base(name.capitalize().also {print("Argument for Base: $it) }) {
+  init { println("initializing Derived") }
+  override val size: Int = (super.size + lastName.length).also {println("Initializing size in Derived: $it")}
+  
+}
+```
+
+It means that, by the time of the base class constructor execution, the properties declared or overridden in the derived class are not yet initialized. If an of those
+properties are used in teh base calss initialization logic(either directly or indirectly, thourgh another overridden open member implementation), it may lead to
+incorrect behavior or a runtime failure. When designing base class, you should there fore avoid using open members in teh constructors, property initializers and init blocks. 
+
+
+Calling superclass implementation
+code in a derived class can call  its supercalls functions and property accessors implementations using 'super' keyword.
+```
+open class Rectangle {
+  open fun draw() {println("Drawing a rectangle") }
+  val borderColor: String get() = "black"
+}
+
+class FilledRectangle : Rectangle() {
+  Override fun draw() {
+    super.draw()
+    println("Filling the rectangel")
+  }
+  
+  val fillColor: String get = super.borderColor
+}
+```
+
+Inside an inner class, accessing teh superclass of the outer class is done with teh super keyword qualified with the outer class name super@Outer:
+```
+class FilledRectangel: Rectangel() {
+  fun draw() { /*****/}
+  val borderColor: Stirng get() = "black"
+  
+  inner class filler {
+    fun fill() { /****/}
+    fun drawAndFill() {
+      super@FilledRectangle.draw() // Calls Rectangle's implemenatation of draww()
+      fill()
+      println("Drawn a filled rectangle with color ${super@filledRectangle.borderColor}")
+    }
+  }
+```
+
+
+Overriding rules
+In Kotlin, implementation inheritance is regulated by the folowing rule: if a class inherits multiple implementations of teh same member from its immediate superclasses,
+it muset override this member and provide its own implementaion (perhaps, using one of the inherited ones). To denote the supertype from which the inherited implementation
+is taken, we use super qualified by teh supertype name in agnle brackets. 
+
+```
+open class Rectangle {
+  open fun draw() { /*****/ }
+}
+
+interface Polygon {
+  fun draw() { /*****/ } // interface members are 'open' by default
+}
+
+class Square() : Rectangle, Polygon {
+  // The compiler requires draw() to be overrideen:
+  override fun draw() {
+    super<Rectangel>.draw() // Call to Rectangle.draw()
+    super<Polygon>.draw() // call to Polygon.draw()
+  }
+
+}
+```
+It's fine to inherit from both Rectangle and Polygon, but both of them have their implementations of draw(), so we have to override draw() in Square and provided its own implementations that eliminates
+the ambiguity.
+
+Abstract classes
+A class and some of its members may be declared abastrac. An abstract member does not have an implementation in its class. Note that we do not need to annotate an abstract class or function with open
+- it goes without saying. 
+
+We can override a non-abstract open memeber with an abstract one. 
+```
+open class Plygon {
+  open fun  draw() {}
+}
+
+abstract class Rectangle : Polygon() {
+  abstract override fun draw()
+}
+```
+
+
+Companion Objects
+If you need to write a function that can be called without having a class instance but needs access to the internals of a class (for example, factory method, you can write it as a member of an object
+delcartation inside that class.
+
+Even more specifically, if you declare a companion object inside your class, you can access its member using
+only the class name as a qualifier. 
+
+
+
+
+
+
