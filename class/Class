@@ -164,3 +164,33 @@ A member marked override is itself open, i.e. it may be overridden in subclasses
 open class Rectangle() : Shape()
   final override fun draw() {/*****/}
 ```
+
+
+Overriding properties
+Overridign proeprties works in a simliar way to overriding methods; properties declared on a superclass that are then redclared on a derived class must be prefaced with Override, 
+and they must have a compatible type. Each declared property  can be overridden by a propety with an initializer or by a property with a get method. 
+```
+open class Shape {
+  open val vertextCount: Int = 0
+}
+
+class Rectangle : Shape() {
+  override val vertexCount = 4
+}
+```
+You can also override a val property with a var property, but not vice versa. Thjis allowed becuase a val property essentially declares a get methdo, and overriding it as a var 
+additionally declars a set method in the derived class. 
+
+Note that you can use teh override keywordd as part of the proerty declaration in a primary constructor. 
+interface Shape {
+  val vertexCount: int
+}
+
+class Rectangle (overide val vertexCount: int = 4) : Shape // alwayus has 4 vertices
+
+class Polygon : Shape {
+  override var vertextCount: Int = 0 // can be set to any number later
+}
+```
+
+
