@@ -1,0 +1,12 @@
+Reflection
+Reflection is a sest of languagae and library features that allows for introspecting the struture of yourr own program at runtime. 
+
+
+Class References
+Teh most basic refelection feature is getting the runtime reference to a kotlin class. To obtain the reference to a statically known kotlin class you can use the class literal
+syntax
+```
+val c = MyClass::class
+```
+The reference is avlue of type kClass
+Note Kotlin class reference is not the same as a java class reference. To obtain a java class reference use the. java property on a kClass instance.
